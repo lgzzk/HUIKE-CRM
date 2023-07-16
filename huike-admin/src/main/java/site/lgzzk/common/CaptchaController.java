@@ -2,42 +2,38 @@ package site.lgzzk.common;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
-import cn.hutool.core.lang.Console;
-import cn.hutool.http.HttpResponse;
+import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.IdUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import site.lgzzk.core.domain.Result;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.util.Base64;
+import java.util.concurrent.TimeUnit;
+
+import static site.lgzzk.constant.RedisConstants.CAPTCHA_KEY;
+import static site.lgzzk.constant.RedisConstants.CAPTCHA_TTL;
 
 @RestController
 public class CaptchaController {
 
+    @Autowired
+    StringRedisTemplate redisTemplate;
+
     @GetMapping("captchaImage")
-    public void captchaImage(HttpServletResponse response, HttpSession session) {
-        try {
-            ServletOutputStream outputStream = response.getOutputStream();
-            LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(300, 100);
-            session.setAttribute("CAPTCHA", lineCaptcha.getCode());
-            response.setContentType("image/jpeg");
-            response.setHeader("Pragma", "No-cache");
-            response.setHeader("Cache-Control", "no-cache");
-            response.setDateHeader("Expire", 0);
-            lineCaptcha.write(outputStream);
-            outputStream.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+    public Result captchaImage() {
+        LineCaptcha captcha = CaptchaUtil.createLineCaptcha(250, 80);
+        String uuid = IdUtil.simpleUUID();
+        String captcha_key = CAPTCHA_KEY + uuid;
+        String captchaCode = captcha.getCode();
+        redisTemplate.opsForValue().set(captcha_key, captchaCode, CAPTCHA_TTL, TimeUnit.MINUTES);
+        String base64 = Base64Utils.encodeToString(captcha.getImageBytes());
+        Result result = Result.ok();
+        result.put("uuid", uuid);
+        result.put("img", base64);
+        return result;
     }
-
-    @GetMapping("checkCaptcha")
-    public String checkCaptcha(HttpSession session, HttpServletRequest request){
-        System.out.println(request.getSession() == session);
-        return session.getAttribute("CAPTCHA").toString();
-    }
-
 }
