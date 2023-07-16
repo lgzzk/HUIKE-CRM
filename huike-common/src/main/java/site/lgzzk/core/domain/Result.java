@@ -48,4 +48,9 @@ public class Result extends HashMap<String, Object> {
         return new Result(ERROR, msg, null);
     }
 
+    @Override
+    public Result put(String key, Object value) {
+        super.put(key, value);
+        return this;
+    }
 }
