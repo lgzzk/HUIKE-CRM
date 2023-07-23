@@ -1,9 +1,8 @@
-package site.lgzzk.core.domain;
+package site.lgzzk.common.core.domain;
+
+import site.lgzzk.common.constant.HttpStatus;
 
 import java.util.HashMap;
-
-import static site.lgzzk.constant.HttpStatus.ERROR;
-import static site.lgzzk.constant.HttpStatus.SUCCESS;
 
 public class Result extends HashMap<String, Object> {
 
@@ -37,7 +36,7 @@ public class Result extends HashMap<String, Object> {
     }
 
     public static Result ok(String msg, Object data) {
-        return new Result(SUCCESS, msg, data);
+        return new Result(HttpStatus.SUCCESS, msg, data);
     }
 
     public static Result fail() {
@@ -45,7 +44,7 @@ public class Result extends HashMap<String, Object> {
     }
 
     public static Result fail(String msg) {
-        return new Result(ERROR, msg, null);
+        return new Result(HttpStatus.ERROR, msg, null);
     }
 
     @Override

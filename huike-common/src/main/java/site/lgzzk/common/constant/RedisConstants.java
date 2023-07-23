@@ -1,4 +1,4 @@
-package site.lgzzk.constant;
+package site.lgzzk.common.constant;
 
 public class RedisConstants {
 
