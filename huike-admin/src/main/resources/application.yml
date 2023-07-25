@@ -12,3 +12,8 @@ spring:
 
 server:
   port: 8081
+
+token:
+  header: Authorization
+  secret: huike-crm-secret-Abcd@jwt171
+  expiration: 30 # minute

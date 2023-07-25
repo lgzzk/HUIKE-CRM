@@ -21,7 +21,7 @@ public class CaptchaController {
     @Autowired
     StringRedisTemplate redisTemplate;
 
-    @GetMapping("captchaImage")
+    @GetMapping("/captchaImage")
     public Result captchaImage() {
         LineCaptcha captcha = CaptchaUtil.createLineCaptcha(120, 50);
         String uuid = IdUtil.simpleUUID();
@@ -31,6 +31,8 @@ public class CaptchaController {
         String base64 = Base64Utils.encodeToString(captcha.getImageBytes());
         return Result.ok()
                 .put("uuid", uuid)
-                .put("img", "data:image/jpg;base64,"+base64);
+                .put("img", "data:image/jpg;base64," + base64);
     }
+
+
 }

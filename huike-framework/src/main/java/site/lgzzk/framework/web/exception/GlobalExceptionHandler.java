@@ -10,7 +10,10 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(CustomException.class)
 	public Result customException(CustomException e){
-        return Result.fail(e.getMessage());
+        if (e.getCode()==null){
+            return Result.fail(e.getMessage());
+        }
+        return Result.fail(e.getMessage(), e.getCode());
     }
 
 }

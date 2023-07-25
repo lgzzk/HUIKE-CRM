@@ -47,6 +47,10 @@ public class Result extends HashMap<String, Object> {
         return new Result(HttpStatus.ERROR, msg, null);
     }
 
+    public static Result fail(String msg,  int code) {
+        return new Result(code, msg, null);
+    }
+
     @Override
     public Result put(String key, Object value) {
         super.put(key, value);

@@ -28,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         wrapper.eq(SysUser::getUserName, username);
         SysUser sysUser = sysUserMapper.selectOne(wrapper);
         if (sysUser == null){
-            throw new CustomException("用户名或密码错误", ERROR);
+            throw new CustomException("用户名或密码错误");
         }
         return new UserLogin(sysUser);
     }
