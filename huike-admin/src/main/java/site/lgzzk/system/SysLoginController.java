@@ -6,6 +6,8 @@ import site.lgzzk.common.core.domain.Result;
 import site.lgzzk.common.core.domain.model.LoginBody;
 import site.lgzzk.framework.web.service.SysLoginService;
 
+import static site.lgzzk.common.constant.Constants.TOKEN;
+
 @RestController
 public class SysLoginController {
 
@@ -14,7 +16,7 @@ public class SysLoginController {
 
     @PostMapping("/login")
     public Result login(@RequestBody LoginBody loginBody) {
-        return Result.ok(sysLoginService.login(loginBody));
+        return Result.ok().put(TOKEN, sysLoginService.login(loginBody));
     }
 
 }

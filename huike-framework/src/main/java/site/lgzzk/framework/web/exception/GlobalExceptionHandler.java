@@ -8,6 +8,11 @@ import site.lgzzk.common.exception.CustomException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(Exception.class)
+    public Result exception(Exception e){
+        return Result.fail(e.getMessage());
+    }
+
 	@ExceptionHandler(CustomException.class)
 	public Result customException(CustomException e){
         if (e.getCode()==null){

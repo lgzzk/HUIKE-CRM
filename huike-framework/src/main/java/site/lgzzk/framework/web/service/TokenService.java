@@ -9,6 +9,8 @@ import site.lgzzk.framework.security.UserLogin;
 
 import java.util.Date;
 
+import static site.lgzzk.common.constant.Constants.LOGIN_USER_KEY;
+
 @Component
 public class TokenService {
 
@@ -24,7 +26,8 @@ public class TokenService {
 
     public String createToken(UserLogin userLogin) {
         return Jwts.builder()
-                .setSubject(userLogin.getUsername())
+                .claim("username", userLogin.getUsername())
+                .claim(LOGIN_USER_KEY,userLogin.getSysUser().getUserId())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * MILLS_IN_MINUTES))
                 .signWith(SignatureAlgorithm.HS512, secret)
