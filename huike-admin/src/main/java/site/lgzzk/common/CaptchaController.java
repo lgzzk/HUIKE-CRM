@@ -9,6 +9,7 @@ import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.lgzzk.common.core.domain.Result;
+import site.lgzzk.common.core.redis.RedisCache;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,7 +20,7 @@ import static site.lgzzk.common.constant.RedisConstants.CAPTCHA_TTL;
 public class CaptchaController {
 
     @Autowired
-    StringRedisTemplate redisTemplate;
+    RedisCache redisCache;
 
     @GetMapping("/captchaImage")
     public Result captchaImage() {
@@ -27,7 +28,7 @@ public class CaptchaController {
         String uuid = IdUtil.simpleUUID();
         String captcha_key = CAPTCHA_KEY + uuid;
         String captchaCode = captcha.getCode();
-        redisTemplate.opsForValue().set(captcha_key, captchaCode, CAPTCHA_TTL, TimeUnit.MINUTES);
+        redisCache.setCacheString(captcha_key, captchaCode, CAPTCHA_TTL, TimeUnit.MINUTES);
         String base64 = Base64Utils.encodeToString(captcha.getImageBytes());
         return Result.ok()
                 .put("uuid", uuid)
