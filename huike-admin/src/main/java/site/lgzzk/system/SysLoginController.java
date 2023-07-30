@@ -19,4 +19,9 @@ public class SysLoginController {
         return Result.ok().put(TOKEN, sysLoginService.login(loginBody));
     }
 
+    @GetMapping("/test")
+    public Result test() {
+        return Result.ok();
+    }
+
 }

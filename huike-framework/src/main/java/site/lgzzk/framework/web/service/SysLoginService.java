@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import site.lgzzk.common.core.domain.model.LoginBody;
 import site.lgzzk.common.core.redis.RedisCache;
 import site.lgzzk.common.exception.CustomException;
-import site.lgzzk.common.utils.JSONUtil;
 import site.lgzzk.framework.security.UserLogin;
 
 import static site.lgzzk.common.constant.RedisConstants.CAPTCHA_KEY;

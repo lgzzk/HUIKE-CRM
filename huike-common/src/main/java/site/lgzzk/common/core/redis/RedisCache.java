@@ -1,9 +1,9 @@
 package site.lgzzk.common.core.redis;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import site.lgzzk.common.utils.JSONUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,11 +15,11 @@ public class RedisCache {
 
 
     public void setCacheObject(String key, Object value) {
-        redisTemplate.opsForValue().set(key, JSONUtil.toJSONString(value));
+        redisTemplate.opsForValue().set(key, JSON.toJSONString(value));
     }
 
     public void setCacheObject(String key, Object value, long timeout, TimeUnit unit) {
-        redisTemplate.opsForValue().set(key, JSONUtil.toJSONString(value), timeout, unit);
+        redisTemplate.opsForValue().set(key, JSON.toJSONString(value), timeout, unit);
     }
 
     public void setCacheString(String key, String value) {
@@ -30,15 +30,15 @@ public class RedisCache {
         redisTemplate.opsForValue().set(key, value, timeout, unit);
     }
 
-    public<T> Object getCacheObject(String key, Class<T> clazz) {
-        return JSONUtil.parseObject(redisTemplate.opsForValue().get(key), clazz);
+    public <T> T getCacheObject(String key, Class<T> clazz) {
+        return JSON.parseObject(redisTemplate.opsForValue().get(key), clazz);
     }
 
-    public String getCacheString(String key){
+    public String getCacheString(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
-    public Boolean delete(String key){
+    public Boolean delete(String key) {
         return redisTemplate.delete(key);
     }
 

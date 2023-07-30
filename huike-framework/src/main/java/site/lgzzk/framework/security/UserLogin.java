@@ -1,5 +1,6 @@
 package site.lgzzk.framework.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,8 +51,5 @@ public class UserLogin implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
-
 
 }
