@@ -48,8 +48,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             throw new CustomException("权限认证失败, 无法访问系统资源", UNAUTHORIZED);
         }
 
-        String loginUserKey = LOGIN_TOKENS + claims.get(LOGIN_USER_KEY);
-        UserLogin userLogin = redisCache.getCacheObject(loginUserKey, UserLogin.class);
+        String loginToken = LOGIN_TOKENS + claims.get(LOGIN_USER_KEY);
+        UserLogin userLogin = redisCache.getCacheObject(loginToken);
         if (userLogin == null) {
             filterChain.doFilter(request, response);
             throw new CustomException("权限认证失败, 请重新登录", UNAUTHORIZED);
