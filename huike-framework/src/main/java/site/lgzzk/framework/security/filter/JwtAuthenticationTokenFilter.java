@@ -49,7 +49,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         String loginToken = LOGIN_TOKENS + claims.get(LOGIN_USER_KEY);
-        UserLogin userLogin = redisCache.getCacheObject(loginToken);
+        UserLogin userLogin = redisCache.getCacheObject(loginToken, UserLogin.class);
         if (userLogin == null) {
             filterChain.doFilter(request, response);
             throw new CustomException("权限认证失败, 请重新登录", UNAUTHORIZED);
