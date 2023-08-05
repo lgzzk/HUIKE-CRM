@@ -1,12 +1,11 @@
-package site.lgzzk.framework.security;
+package site.lgzzk.common.core.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import site.lgzzk.system.entity.SysUser;
+import site.lgzzk.common.core.domain.entity.SysUser;
 
 import java.util.Collection;
 

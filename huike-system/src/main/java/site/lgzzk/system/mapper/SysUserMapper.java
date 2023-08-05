@@ -2,7 +2,7 @@ package site.lgzzk.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
-import site.lgzzk.system.entity.SysUser;
+import site.lgzzk.common.core.domain.entity.SysUser;
 
 /**
 * @author zzk17

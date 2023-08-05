@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import site.lgzzk.common.core.domain.model.LoginBody;
 import site.lgzzk.common.core.redis.RedisCache;
 import site.lgzzk.common.exception.CustomException;
-import site.lgzzk.framework.security.UserLogin;
+import site.lgzzk.common.core.domain.model.UserLogin;
 
 import static site.lgzzk.common.constant.RedisConstants.CAPTCHA_KEY;
 import static site.lgzzk.common.constant.RedisConstants.LOGIN_TOKENS;
@@ -34,7 +34,7 @@ public class SysLoginService {
             throw new CustomException("验证码错误");
         }
 
-        redisCache.delete(loginBody.getUuid());
+        redisCache.delete(captchaKey);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginBody.getUserName(), loginBody.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         UserLogin userLogin = (UserLogin) authenticate.getPrincipal();

@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import site.lgzzk.common.core.redis.RedisCache;
 import site.lgzzk.common.exception.CustomException;
-import site.lgzzk.framework.security.UserLogin;
+import site.lgzzk.common.core.domain.model.UserLogin;
 import site.lgzzk.framework.web.service.TokenService;
 
 import javax.servlet.FilterChain;

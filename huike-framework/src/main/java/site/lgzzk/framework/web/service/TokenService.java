@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import site.lgzzk.framework.security.UserLogin;
+import site.lgzzk.common.core.domain.model.UserLogin;
 
 import java.util.Date;
 
