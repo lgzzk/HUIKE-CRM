@@ -24,4 +24,10 @@ public class SysLoginController {
         return Result.ok();
     }
 
+    @GetMapping("/logout")
+    public Result logout() {
+        sysLoginService.logout();
+        return Result.ok();
+    }
+
 }

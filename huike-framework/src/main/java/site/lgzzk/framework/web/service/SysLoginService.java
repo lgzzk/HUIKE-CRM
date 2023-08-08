@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import site.lgzzk.common.core.domain.model.LoginBody;
 import site.lgzzk.common.core.redis.RedisCache;
@@ -30,16 +31,23 @@ public class SysLoginService {
         if (captcha == null) {
             throw new CustomException("验证码已失效");
         }
+        redisCache.delete(captchaKey);
         if (!captcha.equals(loginBody.getCaptcha())) {
             throw new CustomException("验证码错误");
         }
 
-        redisCache.delete(captchaKey);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginBody.getUserName(), loginBody.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         UserLogin userLogin = (UserLogin) authenticate.getPrincipal();
-        String loginToken = LOGIN_TOKENS + userLogin.getSysUser().getUserId();
-        redisCache.setCacheObject(loginToken, userLogin);
         return tokenService.createToken(userLogin);
     }
+
+    public void logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserLogin userLogin = (UserLogin) authentication.getPrincipal();
+        String loginToken = LOGIN_TOKENS + userLogin.getUuid();
+        redisCache.delete(loginToken);
+    }
+
+
 }

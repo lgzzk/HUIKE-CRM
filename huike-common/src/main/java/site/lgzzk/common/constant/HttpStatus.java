@@ -13,6 +13,12 @@ public class HttpStatus {
     public static final int UNAUTHORIZED = 401;
 
     /**
+     * 没有访问权限
+     */
+    public static final int FORBIDDEN = 403;
+
+
+    /**
      * 服务器内部错误
      */
     public static final int ERROR = 500;

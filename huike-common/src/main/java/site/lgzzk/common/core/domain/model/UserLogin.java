@@ -11,10 +11,15 @@ import java.util.Collection;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class UserLogin implements UserDetails {
 
     private SysUser sysUser;
+
+    private String uuid;
+
+    public UserLogin(SysUser sysUser) {
+        this.sysUser  = sysUser;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
