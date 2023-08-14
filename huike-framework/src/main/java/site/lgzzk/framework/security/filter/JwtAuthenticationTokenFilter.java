@@ -7,9 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import site.lgzzk.common.core.redis.RedisCache;
-import site.lgzzk.common.exception.CustomException;
+import site.lgzzk.common.core.domain.Result;
 import site.lgzzk.common.core.domain.model.UserLogin;
+import site.lgzzk.common.core.redis.RedisCache;
+import site.lgzzk.common.utils.ServletUtils;
 import site.lgzzk.framework.web.service.TokenService;
 
 import javax.servlet.FilterChain;
@@ -18,9 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static site.lgzzk.common.constant.Constants.LOGIN_USER_KEY;
 import static site.lgzzk.common.constant.Constants.TOKEN;
-import static site.lgzzk.common.constant.HttpStatus.UNAUTHORIZED;
 import static site.lgzzk.common.constant.RedisConstants.LOGIN_TOKENS;
 
 @Component
@@ -39,23 +40,22 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
-        Claims claims;
+        Claims claims = null;
         try {
             claims = tokenService.parseToken(token);
         } catch (Exception ignored) {
-            filterChain.doFilter(request, response);
-            throw new CustomException("权限认证失败, 无法访问系统资源", UNAUTHORIZED);
+            ServletUtils.write(response, Result.fail("认证失败, 无法访问系统资源", UNAUTHORIZED.value()));
+            return;
         }
 
         String loginToken = LOGIN_TOKENS + claims.get(LOGIN_USER_KEY);
         UserLogin userLogin = redisCache.getCacheObject(loginToken, UserLogin.class);
         if (userLogin == null) {
-            filterChain.doFilter(request, response);
-            throw new CustomException("权限认证失败, 请重新登录", UNAUTHORIZED);
+            ServletUtils.write(response, Result.fail("认证失败, 请重新登录", UNAUTHORIZED.value()));
+            return;
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLogin, null, null);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLogin, null, userLogin.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
     }

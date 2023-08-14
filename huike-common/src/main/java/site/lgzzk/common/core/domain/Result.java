@@ -1,8 +1,10 @@
 package site.lgzzk.common.core.domain;
 
-import site.lgzzk.common.constant.HttpStatus;
 
 import java.util.HashMap;
+
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.OK;
 
 public class Result extends HashMap<String, Object> {
 
@@ -10,8 +12,8 @@ public class Result extends HashMap<String, Object> {
     public static final String MSG_TAG = "msg";
     public static final String DATA_TAG = "data";
 
-    public static final String SUCCESS_MSG = "操作成功";
-    public static final String ERROR_MSG = "操作失败";
+    public static final String SUCCESS_MSG = "ok";
+    public static final String ERROR_MSG = "fail";
 
 
     private Result() {
@@ -36,7 +38,7 @@ public class Result extends HashMap<String, Object> {
     }
 
     public static Result ok(String msg, Object data) {
-        return new Result(HttpStatus.SUCCESS, msg, data);
+        return new Result(OK.value(), msg, data);
     }
 
     public static Result fail() {
@@ -44,10 +46,10 @@ public class Result extends HashMap<String, Object> {
     }
 
     public static Result fail(String msg) {
-        return new Result(HttpStatus.ERROR, msg, null);
+        return new Result(INTERNAL_SERVER_ERROR.value(), msg, null);
     }
 
-    public static Result fail(String msg,  int code) {
+    public static Result fail(String msg, int code) {
         return new Result(code, msg, null);
     }
 

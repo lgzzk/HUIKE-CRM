@@ -24,7 +24,7 @@ logging:
 token:
   header: Authorization
   secret: huike-crm-secret-Abcd@jwt171
-  expiration: 30 # minute
+  expiration: 180 # minute
 
 mybatis-plus:
   configuration:

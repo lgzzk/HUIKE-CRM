@@ -36,8 +36,13 @@ public class SysLoginService {
             throw new CustomException("验证码错误");
         }
 
+        Authentication authenticate;
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginBody.getUserName(), loginBody.getPassword());
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        try {
+            authenticate = authenticationManager.authenticate(authenticationToken);
+        } catch (Exception e) {
+            throw new CustomException("用户名不存在或密码错误");
+        }
         UserLogin userLogin = (UserLogin) authenticate.getPrincipal();
         return tokenService.createToken(userLogin);
     }

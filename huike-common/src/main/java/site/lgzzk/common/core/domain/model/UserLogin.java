@@ -1,13 +1,16 @@
 package site.lgzzk.common.core.domain.model;
 
-import lombok.AllArgsConstructor;
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import site.lgzzk.common.core.domain.entity.SysUser;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -17,13 +20,29 @@ public class UserLogin implements UserDetails {
 
     private String uuid;
 
+    private List<String> permissions;
+
+    @JSONField(serialize = false)
+    private List<SimpleGrantedAuthority> authorities;
+
+
     public UserLogin(SysUser sysUser) {
-        this.sysUser  = sysUser;
+        this.sysUser = sysUser;
+    }
+
+    public UserLogin(SysUser sysUser, List<String> permissions) {
+        this.sysUser = sysUser;
+        this.permissions = permissions;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        if (this.authorities == null) {
+            this.authorities = this.permissions.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        }
+        return this.authorities;
     }
 
     @Override

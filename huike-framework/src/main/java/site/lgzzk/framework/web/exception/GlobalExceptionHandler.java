@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import site.lgzzk.common.core.domain.Result;
 import site.lgzzk.common.exception.CustomException;
 
-import static site.lgzzk.common.constant.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -17,8 +18,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public Result accessDeniedException(AccessDeniedException e) {
-        return Result.fail(e.getMessage(), FORBIDDEN);
+    public Result accessDeniedException() {
+        return Result.fail("户权限不足，禁止访问", FORBIDDEN.value());
     }
 
     @ExceptionHandler(CustomException.class)
