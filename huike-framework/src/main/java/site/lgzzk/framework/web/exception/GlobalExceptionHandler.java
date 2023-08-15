@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public Result accessDeniedException() {
-        return Result.fail("户权限不足，禁止访问", FORBIDDEN.value());
+        return Result.fail(FORBIDDEN.value(), "权限不足，禁止访问");
     }
 
     @ExceptionHandler(CustomException.class)
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
         if (e.getCode() == null) {
             return Result.fail(e.getMessage());
         }
-        return Result.fail(e.getMessage(), e.getCode());
+        return Result.fail(e.getCode(), e.getMessage());
     }
 
 }

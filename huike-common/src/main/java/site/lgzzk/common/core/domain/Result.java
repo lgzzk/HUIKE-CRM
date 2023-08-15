@@ -1,61 +1,59 @@
 package site.lgzzk.common.core.domain;
 
 
-import java.util.HashMap;
+import lombok.Data;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
-public class Result extends HashMap<String, Object> {
+@Data
+public class Result<T> {
 
-    public static final String CODE_TAG = "code";
-    public static final String MSG_TAG = "msg";
-    public static final String DATA_TAG = "data";
+    private String massage;
+    private Integer code;
+    private T data;
 
     public static final String SUCCESS_MSG = "ok";
     public static final String ERROR_MSG = "fail";
 
-
     private Result() {
     }
 
-    private Result(int code, String msg, Object data) {
-        super.put(CODE_TAG, code);
-        super.put(MSG_TAG, msg);
-        if (data != null) super.put(DATA_TAG, data);
+    public static <T> Result<T> build(Integer code, String massage, T data) {
+        Result<T> result = new Result<>();
+        result.massage = massage;
+        result.code = code;
+        result.data = data;
+        return result;
     }
 
-    public static Result ok() {
-        return Result.ok(SUCCESS_MSG);
+    public static <T> Result<T> ok() {
+        return ok(SUCCESS_MSG);
     }
 
-    public static Result ok(Object data) {
-        return Result.ok(SUCCESS_MSG, data);
+    public static <T> Result<T> ok(T data) {
+        return ok(SUCCESS_MSG, data);
     }
 
-    public static Result ok(String msg) {
-        return Result.ok(msg, null);
+    public static <T> Result<T> ok(String massage) {
+        return ok(massage, null);
     }
 
-    public static Result ok(String msg, Object data) {
-        return new Result(OK.value(), msg, data);
+    public static <T> Result<T> ok(String massage, T data) {
+        return build(OK.value(), massage, data);
     }
 
-    public static Result fail() {
-        return Result.fail(ERROR_MSG);
+    public static <T> Result<T> fail() {
+        return fail(ERROR_MSG);
     }
 
-    public static Result fail(String msg) {
-        return new Result(INTERNAL_SERVER_ERROR.value(), msg, null);
+    public static <T> Result<T> fail(String msg) {
+        return fail(INTERNAL_SERVER_ERROR.value(), msg);
     }
 
-    public static Result fail(String msg, int code) {
-        return new Result(code, msg, null);
+    public static <T> Result<T> fail(Integer code, String msg) {
+        return build(code, msg, null);
     }
 
-    @Override
-    public Result put(String key, Object value) {
-        super.put(key, value);
-        return this;
-    }
+
 }

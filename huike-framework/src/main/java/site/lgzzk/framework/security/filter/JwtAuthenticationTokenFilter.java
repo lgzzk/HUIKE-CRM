@@ -44,14 +44,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         try {
             claims = tokenService.parseToken(token);
         } catch (Exception ignored) {
-            ServletUtils.write(response, Result.fail("认证失败, 无法访问系统资源", UNAUTHORIZED.value()));
+            ServletUtils.write(response, Result.fail(UNAUTHORIZED.value(), "认证失败, 无法访问系统资源"));
             return;
         }
 
         String loginToken = LOGIN_TOKENS + claims.get(LOGIN_USER_KEY);
         UserLogin userLogin = redisCache.getCacheObject(loginToken, UserLogin.class);
         if (userLogin == null) {
-            ServletUtils.write(response, Result.fail("认证失败, 请重新登录", UNAUTHORIZED.value()));
+            ServletUtils.write(response, Result.fail(UNAUTHORIZED.value(), "认证失败, 请重新登录"));
             return;
         }
 

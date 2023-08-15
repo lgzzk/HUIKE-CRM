@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import site.lgzzk.common.core.domain.Result;
 import site.lgzzk.common.core.redis.RedisCache;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import static site.lgzzk.common.constant.RedisConstants.CAPTCHA_KEY;
@@ -22,16 +23,17 @@ public class CaptchaController {
     RedisCache redisCache;
 
     @GetMapping("/captchaImage")
-    public Result captchaImage() {
+    public Result<HashMap<String, String>> captchaImage() {
         LineCaptcha captcha = CaptchaUtil.createLineCaptcha(120, 50);
         String uuid = IdUtil.simpleUUID();
         String captcha_key = CAPTCHA_KEY + uuid;
         String captchaCode = captcha.getCode();
         redisCache.setCacheString(captcha_key, captchaCode, CAPTCHA_TTL, TimeUnit.MINUTES);
         String base64 = Base64Utils.encodeToString(captcha.getImageBytes());
-        return Result.ok()
-                .put("uuid", uuid)
-                .put("img", "data:image/jpg;base64," + base64);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("uuid", uuid);
+        map.put("image", "data:image/jpg;base64," + base64);
+        return Result.ok(map);
     }
 
 
